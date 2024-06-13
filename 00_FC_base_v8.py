@@ -1,5 +1,6 @@
 # import libraries
 import pandas
+import math
 
 
 # **** Functions go here ****
@@ -193,10 +194,17 @@ def profit_goal(total_costs):
                 return goal
 
 
+# Rounding function
+def round_up(amount, round_to):
+    return int(math.ceil(amount / round_to)) * round_to
+
+
 # **** Main Routine goes here ****
 # Get product name
 product_name = not_blank("Product name: ", "The product name can't be blank")
 
+how_many = num_check("How many items will you be producing? The number of items must be a whole number more than zero",
+                     int)
 print()
 print("Please enter your variable costs below...")
 # Get variable costs
@@ -215,6 +223,17 @@ if have_fixed == "yes":
 else:
     fixed_sub = 0
 
+# work out total costs and profit target
+all_costs = variable_sub + fixed_sub
+profit_target = profit_goal(all_costs)
+
+# calculates total sales needed to reach goal
+sales_needed = all_costs + profit_target
+
+# ask user for rounding
+round_to = num_check("Round to nearest...? $",
+                     "Can't be 0", int)
+
 # Work out total costs and profit target
 all_costs = variable_sub + fixed_sub
 profit_target = profit_goal(all_costs)
@@ -227,6 +246,9 @@ selling_price = 0
 # Ask user for profit goal
 
 # Calculate recommended price
+selling_price = sales_needed / how_many
+print("Selling Price (unrounded): ${:.2f}".format(selling_price))
+
 
 # Write data to file
 
@@ -247,7 +269,6 @@ print()
 print()
 print("**** Profit & Sales Targets ****")
 print("Profit Target: ${:.2f}".format(all_costs + profit_target))
+print("Total Sales: ${:.2f}".format(all_costs + profit_target))
 
-print()
-print("**** Recommended Selling Price:"
-      " ${:.2f}".format(selling_price))
+
